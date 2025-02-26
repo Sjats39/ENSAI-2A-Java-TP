@@ -1,6 +1,8 @@
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,10 +42,12 @@ public class Password {
      */
     public static String bruteForce6Digit(String targetHash) {
 
-        for (Integer i = 0; i == 999999; i += 1) {
+        for (Integer i = 0; i <= 999999; i++) {
+            String str_pass = String.format("%06d", i);
+            String cle_hachage = hashPassword(str_pass);
 
-            if (hashPassword(String.format("%06d", i)) == targetHash) {
-                return String.format("%06d", i);
+            if (cle_hachage.equals(targetHash)) {
+                return str_pass;
             }
         }
 
@@ -66,9 +70,42 @@ public class Password {
      */
     public static boolean isStrongPassword(String password) {
 
-        // Code here
+        // Check the length condition
+        if (password.length() < 12) {
+            return false;
+        }
 
-        return false;
+        // Check for at least one uppercase letter
+        boolean hasUppercase = false;
+
+        // Check for at least one lowercase letter
+        boolean hasLowercase = false;
+
+        // Check for at least one digit
+        boolean hasDigit = false;
+
+        // Check for any whitespace character
+        boolean hasWhitespace = false;
+
+        // Traverse the password to check the conditions
+        char c;
+        for (int i = 0; i < password.length(); i++) {
+            c = password.charAt(i);
+
+            if (Character.isUpperCase(c)) {
+                hasUppercase = true;
+            } else if (Character.isLowerCase(c)) {
+                hasLowercase = true;
+            } else if (Character.isDigit(c)) {
+                hasDigit = true;
+            } else if (Character.isWhitespace(c)) {
+                hasWhitespace = true;
+            }
+        }
+
+        // Return true only if all conditions are met
+        return hasUppercase && hasLowercase && hasDigit && !hasWhitespace;
+
     }
 
     /**
@@ -81,9 +118,16 @@ public class Password {
      */
     public static HashMap<String, Boolean> checkPasswordsList(ArrayList<String> passwords) {
 
-        // Code here
+        HashMap<String, Boolean> dict = new HashMap<>();
+        String password;
+        for (int i = 0; i < passwords.size(); i++) {
+            password = passwords.get(i);
+            dict.put(password, isStrongPassword(password));
+        }
 
-        return null;
+        // Return true only if all conditions are met
+        return dict;
+
     }
 
     /**
@@ -99,10 +143,37 @@ public class Password {
      * @return A randomly generated password that meets the security criteria.
      */
     public static String generatePassword(int nbCar) {
+        if (nbCar < 4) {
+            return null;
+        }
 
-        // Code here
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String digits = "0123456789";
+        String specialChars = "!@#$%^&*()-_+=<>?";
 
-        return null;
+        List<Character> password = new ArrayList<>();
+
+        SecureRandom random = new SecureRandom();
+
+        password.add(uppercase.charAt(random.nextInt(uppercase.length())));
+        password.add(lowercase.charAt(random.nextInt(lowercase.length())));
+        password.add(digits.charAt(random.nextInt(digits.length())));
+        password.add(specialChars.charAt(random.nextInt(specialChars.length())));
+
+        String allCharacters = uppercase + lowercase + digits + specialChars;
+        for (int i = 4; i < nbCar; i++) {
+            password.add(allCharacters.charAt(random.nextInt(allCharacters.length())));
+        }
+
+        Collections.shuffle(password);
+
+        StringBuilder passwordStr = new StringBuilder();
+        for (char c : password) {
+            passwordStr.append(c);
+        }
+
+        return passwordStr.toString();
     }
 
     public static void main(String[] args) {

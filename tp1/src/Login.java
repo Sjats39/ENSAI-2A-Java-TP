@@ -6,13 +6,40 @@ import java.util.Scanner;
 
 public class Login {
     public static void main(String[] args) {
-        HashMap<String, String> userDatabase = loadUserDatabase("../data/user_hashpwd.csv");
+        HashMap<String, String> userDatabase = loadUserDatabase(
+                "/home/onyxia/ENSAI-2A-Java-TP/tp1/data/user_hashpwd.csv");
         Scanner scanner = new Scanner(System.in);
+        String username;
+        HashMap<String, Integer> nb_visited = new HashMap<String, Integer>();
+        String password;
+        Boolean moins_trois_essais = true;
+        while (moins_trois_essais) {
+            System.out.print("Enter username: ");
+            username = scanner.nextLine();
 
-        while (true) {
+            // Check if the username exists in the user database
+            if (userDatabase.containsKey(username)) {
+                System.out.print("Enter password: ");
+                password = scanner.nextLine();
 
-            // Code here
+                // Increment the visit count using computeIfAbsent and computeIfPresent
+                nb_visited.computeIfAbsent(username, key -> 1); // If absent, set the initial value to 0
+                nb_visited.computeIfPresent(username, (key, value) -> value + 1); // Increment visits
+
+                if (password.equals(userDatabase.get(username))) {
+                    System.out.println("Login successful!");
+                    break;
+                }
+                if (nb_visited.get(username) > 3) {
+                    moins_trois_essais = false;
+                    System.out.println("Too many attempts");
+
+                }
+            }
         }
+
+        // Close the scanner after input is done
+        scanner.close();
     }
 
     /**
