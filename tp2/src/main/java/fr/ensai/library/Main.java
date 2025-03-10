@@ -14,5 +14,9 @@ public class Main {
                 423);
 
         System.out.println(fellowshipOfTheRing.toString());
+
+        Library myLibrary = new Library("myLibrary"; List<Book>());
+        myLibrary.loadBooksFromCSV("tp2/src/main/resources/books.csv");
+        myLibrary.displayBooks();
     }
 }
