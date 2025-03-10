@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 /**
  * Represents a library.
  */
@@ -11,33 +12,42 @@ public class Library{
 
     // Attributes
     private String name;
-    private List<Book> books;
+    private List<Item> items;
+    private List<Loan> activeLoans;
+    private List<Loan> completedLoans;
+
     
     /**
      * Constructs a new library object.
      */
-    public Library(String name, String title, List<Book> books) {
+    public Library(String name,
+                   List<Item> items,
+                   List<Loan> activeLoans,
+                   List<Loan> completedLoans) {
+
         this.name = name;
-        this.books = books;
+        this.items = items;
+        this.activeLoans = activeLoans;
+        this.completedLoans = completedLoans;
     }
 
     /**
      * Adds a new book to the library.
      */
-    public void addBook(Book book) {
-        books.add(book);
+    public void addItem(Item item) {
+        items.add(item);
     }
 
     /**
      * Prints all books in the library.
      */
-    public void displayBooks() {
-        if books.isEmpty(){
+    public void displayItems() {
+        if items.isEmpty(){
             System.out.println("The library is empty.");
         }
         else{
-            for(Book livre : books){
-                System.out.println(livre.toString());
+            for(Item item : items){
+                System.out.println(item.toString());
             }
         }
     }
@@ -77,7 +87,7 @@ public class Library{
                     }
                     Book book = new Book(isbn, title, author, year, pageCount);
 
-                    this.addIem(book);
+                    this.addItem(book);
                 }
             }
         } catch (
@@ -85,5 +95,71 @@ public class Library{
         IOException e) {
             System.err.println("Error reading the file: " + e.getMessage());
         }
+    }
+
+    public Loan findActiveLoanForItem(Item item){
+        // Look if the item is present in active loans
+        // Run unit tests
+        for(Loan loan : activeLoans){
+            if(loan.item == item){
+                return loan;
+            }
+        }
+        return null;
+    }
+
+    
+
+    public ArrayList<Book> getBooksByAuthor(Author author){
+        List<Book>  res = List<Book>();
+        for(Item item : items){
+            if(item instanceof Book){ 
+                if(item.author == author){
+                    res.add(item);
+                }
+            }
+        }
+        return res;
+    }
+
+
+    public boolean loanItem(Item item, Student student){
+        // Check if the item is available
+        // Create a Loan and add it to activeLoans
+        if(this.findActiveLoanForItem(item)== null){
+            Loan loan = new Loan(student, item, LocalDate.now(), null);
+            activeLoans.add(loan);
+            return true;
+        }
+        return false;
+    }
+
+    
+
+    public boolean renderItem(Item item){
+        // Find the Loan if exists
+        //Add a return date
+        // Move an item from activeLoans to completedLoans
+        
+        int index = this.findActiveLoanForItem(item)
+        
+        if(index == null){
+            return false;
+        }
+
+        Loan loan = activeLoans.remove(index)
+        loan.returnDate = LocalDate.now();
+        completedLoans.add(loan);
+        
+    }
+
+    
+
+    public void displayActiveLoans(){
+        for(Loan loan :activeLoans){
+            System.out.println(loan.toString())
+        }
+
+
     }
 }

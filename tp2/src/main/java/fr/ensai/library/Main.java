@@ -15,8 +15,12 @@ public class Main {
 
         System.out.println(fellowshipOfTheRing.toString());
 
-        Library myLibrary = new Library("myLibrary"; List<Book>());
+        Library myLibrary = new Library("myLibrary"; List<Item>());
         myLibrary.loadBooksFromCSV("tp2/src/main/resources/books.csv");
-        myLibrary.displayBooks();
+        magazine1 = new Magazine("Magazine 1", 2025, 50, 11, 12);
+        magazine2 = new Magazine("Magazine 2", 1995, 37, 1, 102);
+        myLibrary.addItem(magazine1);
+        myLibrary.addItem(magazine2);
+        myLibrary.displayItems();
     }
 }
