@@ -1,29 +1,33 @@
 package fr.ensai.library;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Represents a library.
  */
 
-public class Library{
+public class Library {
 
     // Attributes
     private String name;
-    private List<Item> items;
-    private List<Loan> activeLoans;
-    private List<Loan> completedLoans;
+    private ArrayList<Item> items;
+    private ArrayList<Loan> activeLoans;
+    private ArrayList<Loan> completedLoans;
 
-    
     /**
      * Constructs a new library object.
      */
     public Library(String name,
-                   List<Item> items,
-                   List<Loan> activeLoans,
-                   List<Loan> completedLoans) {
+            ArrayList<Item> items,
+            ArrayList<Loan> activeLoans,
+            ArrayList<Loan> completedLoans) {
 
         this.name = name;
         this.items = items;
@@ -42,11 +46,10 @@ public class Library{
      * Prints all books in the library.
      */
     public void displayItems() {
-        if items.isEmpty(){
+        if (items.isEmpty()) {
             System.out.println("The library is empty.");
-        }
-        else{
-            for(Item item : items){
+        } else {
+            for (Item item : items) {
                 System.out.println(item.toString());
             }
         }
@@ -97,24 +100,22 @@ public class Library{
         }
     }
 
-    public Loan findActiveLoanForItem(Item item){
+    public Loan findActiveLoanForItem(Item item) {
         // Look if the item is present in active loans
         // Run unit tests
-        for(Loan loan : activeLoans){
-            if(loan.item == item){
+        for (Loan loan : activeLoans) {
+            if (loan.item == item) {
                 return loan;
             }
         }
         return null;
     }
 
-    
-
-    public ArrayList<Book> getBooksByAuthor(Author author){
-        List<Book>  res = List<Book>();
-        for(Item item : items){
-            if(item instanceof Book){ 
-                if(item.author == author){
+    public ArrayList<Book> getBooksByAuthor(Author author) {
+        ArrayList<Book> res = new ArrayList<Book>();
+        for (Item item : items) {
+            if (item instanceof Book) {
+                if (item.author == author) {
                     res.add(item);
                 }
             }
@@ -122,11 +123,10 @@ public class Library{
         return res;
     }
 
-
-    public boolean loanItem(Item item, Student student){
+    public boolean loanItem(Item item, Student student) {
         // Check if the item is available
         // Create a Loan and add it to activeLoans
-        if(this.findActiveLoanForItem(item)== null){
+        if (this.findActiveLoanForItem(item) == null) {
             Loan loan = new Loan(student, item, LocalDate.now(), null);
             activeLoans.add(loan);
             return true;
@@ -134,32 +134,27 @@ public class Library{
         return false;
     }
 
-    
-
-    public boolean renderItem(Item item){
+    public boolean renderItem(Item item) {
         // Find the Loan if exists
-        //Add a return date
+        // Add a return date
         // Move an item from activeLoans to completedLoans
-        
-        int index = this.findActiveLoanForItem(item)
-        
-        if(index == null){
+
+        Loan loan = this.findActiveLoanForItem(item);
+
+        if (loan == null) {
             return false;
         }
 
-        Loan loan = activeLoans.remove(index)
+        activeLoans.remove(loan);
         loan.returnDate = LocalDate.now();
         completedLoans.add(loan);
-        
+
     }
 
-    
-
-    public void displayActiveLoans(){
-        for(Loan loan :activeLoans){
-            System.out.println(loan.toString())
+    public void displayActiveLoans() {
+        for (Loan loan : activeLoans) {
+            System.out.println(loan.toString());
         }
-
 
     }
 }

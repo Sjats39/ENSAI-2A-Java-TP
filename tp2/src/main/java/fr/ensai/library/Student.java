@@ -1,11 +1,9 @@
 package fr.ensai.library;
 
-import java.util.Objects;
-
 /**
  * Represents an Author.
  */
-public class Student extends Person{
+public class Student extends Person {
 
     // Attributes
     private String academicYear;
@@ -14,7 +12,7 @@ public class Student extends Person{
     /**
      * Constructs a new Author object.
      */
-    public Author(String name, int age, String nationality) {
+    public Student(String name, int age, String academicYear, boolean isClassDelegate) {
         super(name, age);
         this.academicYear = academicYear;
         this.isClassDelegate = isClassDelegate;
@@ -22,7 +20,7 @@ public class Student extends Person{
 
     @Override
     public String toString() {
-        return "Student " + name;
+        return "Student " + this.name;
     }
 
 }

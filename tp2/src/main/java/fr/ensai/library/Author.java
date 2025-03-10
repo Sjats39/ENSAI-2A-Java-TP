@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * Represents an Author.
  */
-public class Author extends Person{
+public class Author extends Person {
 
     // Attributes
     private String nationality;
@@ -17,7 +17,6 @@ public class Author extends Person{
         super(name, age);
         this.nationality = nationality;
     }
-
 
     /**
      * Indicates whether some other object is "equal to" this one.
